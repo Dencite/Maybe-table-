@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head><title>UC Deck Finder</title></head>
+<body>
+  <h2>Find Deck by Ultimate Champion Medals</h2>
+  <input id="medals" type="number" placeholder="Enter medals" />
+  <button onclick="fetchDeck()">Fetch Deck</button>
+  <pre id="output"></pre>
 
+  <script>
+    async function fetchDeck() {
+      const medals = parseInt(document.getElementById("medals").value);
+      const response = await fetch("https://jk.onrender.com/get-deck", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ medals: medals })
+      });
+
+      const result = await response.json();
+      if (result.deck) {
+        document.getElementById("output").textContent =
+          "Deck:\n" + result.deck.map(c => `${c.name} (Level ${c.level})`).join("\n");
+      } else {
+        document.getElementById("output").textContent = "Error: " + result.error;
+      }
+    }
+  </script>
+</body>
+</html>
